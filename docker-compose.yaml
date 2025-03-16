@@ -1,8 +1,6 @@
-version: '3.1'
-
 services:
   db:
-    image: mariadb
+    image: mariadb:latest
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: randomTestSecret
@@ -11,3 +9,20 @@ services:
       MYSQL_PASSWORD: appResTestPassword
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ['CMD-SHELL', 'mariadb-admin ping -h 127.0.0.1 --password="randomTestSecret" --silent']
+      interval: 3s
+      retries: 5
+      start_period: 30s
+  backend:
+    image: aws-simple-python-rest-api:0.1.0
+    ports:
+      - "5005:5000"
+    environment:
+      DB_DATABASE: resources_db
+      DB_HOSTNAME: db
+      DB_PASSWORD: appResTestPassword
+      DB_USERNAME: resourcesClient
+    depends_on:
+      db:
+        condition: service_healthy

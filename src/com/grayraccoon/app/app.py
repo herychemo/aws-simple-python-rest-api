@@ -51,3 +51,6 @@ def update_resource(resource_id):
 def delete_resource(resource_id):
     service.delete(resource_id)
     return '{}', 204
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
