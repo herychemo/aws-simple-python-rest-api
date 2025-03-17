@@ -9,8 +9,8 @@ def get_secret_value(secret_name, aws_region):
     client = session.client(service_name='secretsmanager', region_name=aws_region)
 
     secret_response = client.get_secret_value(SecretId=secret_name)
-    if 'SecretStrig' in secret_response:
-        return secret_response['SecretStrig']
+    if 'SecretString' in secret_response:
+        return secret_response['SecretString']
     else:
         binary_secret = secret_response['SecretBinary']
         return base64.b64encode(binary_secret)
